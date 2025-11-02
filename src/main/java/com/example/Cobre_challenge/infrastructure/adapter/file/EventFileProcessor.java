@@ -86,17 +86,25 @@ public class EventFileProcessor implements CommandLineRunner {
     }
 
     private void setupInitialAccounts() {
-        log.info("Estableciendo condiciones iniciales de las cuentas...");
+        log.info("Verificando y estableciendo condiciones iniciales de las cuentas...");
 
-        Account acc1 = new Account("ACC123456789", "COP", new BigDecimal("200000.00"));
-        Account acc2 = new Account("ACC987654321", "USD", new BigDecimal("0.00"));
+        // Cuenta 1
+        if (accountRepository.findById("ACC123456789").isEmpty()) {
+            Account acc1 = new Account("ACC123456789", "COP", new BigDecimal("200000.00"));
+            accountRepository.save(acc1);
+            log.info("Cuenta {} CREADA con saldo: {} {}", acc1.getAccountId(), acc1.getCurrency(), acc1.getBalance());
+        } else {
+            log.info("Cuenta {} ya existe, no se modifica.", "ACC123456789");
+        }
 
-        // Usamos el puerto para guardarlas
-        accountRepository.save(acc1);
-        accountRepository.save(acc2);
-
-        log.info("Cuenta {} creada con saldo: {} {}", acc1.getAccountId(), acc1.getCurrency(), acc1.getBalance());
-        log.info("Cuenta {} creada con saldo: {} {}", acc2.getAccountId(), acc2.getCurrency(), acc2.getBalance());
+        // Cuenta 2
+        if (accountRepository.findById("ACC987654321").isEmpty()) {
+            Account acc2 = new Account("ACC987654321", "USD", new BigDecimal("0.00"));
+            accountRepository.save(acc2);
+            log.info("Cuenta {} CREADA con saldo: {} {}", acc2.getAccountId(), acc2.getCurrency(), acc2.getBalance());
+        } else {
+            log.info("Cuenta {} ya existe, no se modifica.", "ACC987654321");
+        }
     }
 
     /**

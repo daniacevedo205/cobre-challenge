@@ -13,10 +13,10 @@ public class Account {
     private final String currency;
     private BigDecimal balance;
 
-    public Account(String accountId, String currency, BigDecimal initialBalance) {
+    public Account(String accountId, String currency, BigDecimal balance) {
         this.accountId = Objects.requireNonNull(accountId);
         this.currency = Objects.requireNonNull(currency);
-        this.balance = Objects.requireNonNull(initialBalance);
+        this.balance = Objects.requireNonNull(balance);
     }
 
     public void debit(BigDecimal amount) {

@@ -1,13 +1,20 @@
+version: "3.8"
+
 services:
-  postgres-db:
-    image: postgres:15
-    container_name: cbmm-postgres
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cbmm-mssql
     environment:
-      POSTGRES_DB: cbmm_accounts
-      POSTGRES_USER: cobre_user
-      POSTGRES_PASSWORD: cobre_password
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "StrongP4ssword!"
+      MSSQL_PID: "Developer"   # o "Express" / "Standard" según el caso
+      TZ: "UTC"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    command: ["postgres", "-c", "timezone=UTC"]   # 👈 añade esta línea
+      - mssql-data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
+    driver: local

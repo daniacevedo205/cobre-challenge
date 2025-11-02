@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions", indexes = {
-        @Index(name = "idx_event_id", columnList = "eventId", unique = true)
+        @Index(name = "idx_event_id", columnList = "eventId", unique = false)
 })
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class TransactionEntity {
     @Column(nullable = false)
     private String accountId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String eventId;
 
     @Enumerated(EnumType.STRING)
