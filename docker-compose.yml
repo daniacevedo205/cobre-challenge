@@ -1,0 +1,13 @@
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: cbmm-postgres
+    environment:
+      POSTGRES_DB: cbmm_accounts
+      POSTGRES_USER: cobre_user
+      POSTGRES_PASSWORD: cobre_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "timezone=UTC"]   # 👈 añade esta línea
