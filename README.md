@@ -20,7 +20,7 @@ La solución está implementada en **Spring Boot** y sigue los principios de la 
 * **Gestión de Saldos y Ledger**: Mantiene el saldo actual y un historial auditable de transacciones (créditos y débitos).
 * **Procesamiento Concurrente**: Utiliza `parallelStream()` para procesar la lista de eventos del archivo en paralelo, demostrando la capacidad del sistema para manejar concurrencia.
 * **Manejo de Concurrencia (Datos)**: Utiliza **Bloqueo Optimista** (`@Version` en `AccountEntity`) para prevenir *race conditions* y garantizar la consistencia de los saldos sin bloquear la base de datos.
-* **Idempotencia**: El `ProcessTransactionService` verifica el `event_id` antes de procesar cualquier evento, asegurando que un evento duplicado no se aplique dos veces.
+* **Idempotencia**: El `ProcessTransactionService` verifica el `event_id` antes de procesar cualquier evento, asegurando que un evento duplicado no se aplique dos veces. La lógica de inicialización (`setupInitialAccounts`) también es idempotente.
 * **Separación de Conceptos**: La lógica de negocio (`domain`) está 100% desacoplada de la persistencia (JPA) y de la entrada (el procesador de archivos).
 
 ## 🚀 Cómo Ejecutar
@@ -52,7 +52,7 @@ Crea este archivo con el siguiente contenido de ejemplo (o una lista más grande
   }
 ]
 ```
-*(Nota: El saldo inicial para `ACC123456789` se ha asumido como `200000.00 COP` para que este evento sea válido, corrigiendo la discrepancia del documento).*
+*(Nota: El saldo inicial para ACC123456789 se ha asumido como 200000.00 COP para que este evento sea válido, corrigiendo la discrepancia del documento).*
 
 ### 2. Ejecutar (Opción A: H2 - Base de datos en memoria)
 
@@ -65,11 +65,11 @@ Este es el modo por defecto. Rápido y no requiere configuración.
 
 La aplicación creará las cuentas iniciales, procesará `events.json` y se detendrá.
 
-### 3. Ejecutar (Opción B: PostgreSQL - Docker)
+### 3. Ejecutar (Opción B: SQL Server - Docker)
 
 Modo recomendado para probar la persistencia real y el bloqueo optimista.
 
-1.  **Asegurar la dependencia**: Verifica que `implementation 'org.postgresql:postgresql'` esté en tu `build.gradle`.
+1.  **Asegurar la dependencia**: Verifica que `com.microsoft.sqlserver:mssql-jdbc'` esté en tu `build.gradle`.
 2.  **Iniciar la Base de Datos**:
     ```bash
     docker-compose up -d
@@ -94,3 +94,4 @@ INFO --- [main] c.c.c.a.i.a.f.EventFileProcessor : SALDO FINAL: Cuenta: ACC98765
 Este proyecto fue desarrollado con la asistencia de un modelo de IA (Gemini). Se utilizó para:
 * Configuración de `docker-compose.yml` y `application-docker.properties`.
 * Generación de este `README.md`.
+* Bocetado de la estructura de la Arquitectura Hexagonal
